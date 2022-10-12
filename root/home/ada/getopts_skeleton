@@ -1,0 +1,34 @@
+#!/bin/bash
+
+COW_FORMAT="no"
+NAME=
+SCRIPT=$(basename "$0")
+
+while getopts ":cn:" ARG; do
+  case ${ARG} in
+    # Use cowsay to format output
+    c )
+      COW_FORMAT="yes"
+      ;;
+    # Set person name used in the program
+    n )
+      NAME="${OPTARG}"
+      ;;
+    # Option entered by user does not exist
+    \? )
+      echo "${SCRIPT}: Invalid option -$OPTARG ignored"
+      ;;
+    # Option entered by user is missing argument
+    : )
+      echo "${SCRIPT}: must supply an argument to -$OPTARG"
+      ;;
+  esac
+done
+
+# Function to print help (script usage)
+usage() {
+  echo "Usage: $1"
+  echo " -n person_name    path to the file where to save the output"
+  echo "[-c]               use cow formatting"
+}
+

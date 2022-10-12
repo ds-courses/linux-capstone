@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+#
+# Extract country happiness data from a specific year and append it to a file
+# If the file doesn't exist, it will create it
+
+SCRIPT=$(basename "$0")
+CSVFILE=
+OUTFILE=
+YEAR=
+
+### Usage
+if [[ $# == 0 ]]; then
+  echo "Usage: $SCRIPT"
+  echo "-f PATH      path to the CSV happiness data file"
+  echo "-o PATH      path to the output file to write to"
+  echo "-y INTEGER   year to extract (between 2000 and 2050)"
+  echo "Example: ${SCRIPT} -f my_file.csv -o my_output.csv -y 2019"
+  echo ""
+  echo "If the year is found:"
+  echo "- if the output file does not exist it will be created."
+  echo "- if the output file exists, a line will be appended to it."
+  exit 1
+fi
+
+### Parsing
+while getopts :f:o:y: arg
+do
+  case $arg in
+    # Input file
+    f) if [[ -f "${OPTARG}" && "${OPTARG##*.}" == "csv" ]]; then
+         CSVFILE="${OPTARG}"
+       else
+         echo "${SCRIPT}: ${OPTARG} is not an existing CSV file"
+         exit 1
+       fi
+       ;;
+    o) OUTFILE="${OPTARG}"
+       ;;
+    y) YEAR="${OPTARG}"
+       ;;
+    # Parameter requiring an argument
+    :) echo "${SCRIPT}: Must supply an argument to -${OPTARG}."
+       exit 1
+       ;;
+    # Invalid parameter
+   \?) echo "Invalid option -${OPTARG} ignored."
+       ;;
+  esac
+done
+
+if [[ -z "${CSVFILE}" || -z "${OUTFILE}" || -z "${YEAR}" ]]; then
+  echo "${SCRIPT}: The year, the path to the CSV happiness file,"
+  echo "    and the output file must all be provided."
+  exit 1
+fi
+
+# Actual function to extract line with the given year
+
+
+N_LINE=0
+while read -r LINE; do
+    N_LINE=$(( N_LINE + 1 ))
+    # Skip first line which is the file header
+    if [[ ${N_LINE} -eq 1 ]]; then
+      continue
+    fi
+    # Parse year by cutting row by comma delimiter (cut -d ",")
+    # and saving second field (-f 2) which is the year
+    DATA_YEAR=$(echo "${LINE}" | cut -d "," -f 2)
+    # If the year if found, copy the data to the provided output file and exit
+    if [[ ${DATA_YEAR} -eq ${YEAR} ]]; then
+      echo "${LINE}" >> "${OUTFILE}"
+      exit 0
+    fi
+done < "${CSVFILE}"
+
+# If the code reaches here, it means it didn't exit (and thus didn't find year)
+echo "${SCRIPT}: WARNING, data for the year ${YEAR} was not found."
+exit 1
+
+
