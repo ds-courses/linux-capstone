@@ -78,7 +78,7 @@ happiness_proj
     ...
 ```
 
-3. Create a new script called `preproc_year_v1` which:
+3. Create a new script called `preproc_year_v1` inside the `happiness_proj` directory, that:
   * assigns to a variable `IN_DIR` the absolute path to your `happiness_proj` directory
   * assigns to a variable `RAW_DIR` the path to the `raw` directory, using the value of the `IN_DIR` variable previously defined
   * assigns to a variable `YEAR` an integer between 2008 and 2021 (choose it yourself)
