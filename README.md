@@ -78,20 +78,22 @@ happiness_proj
     ...
 ```
 
-3. Create a new script call `preproc_year_v1` which:
+3. Create a new script called `preproc_year_v1` which:
   * assigns to a variable `IN_DIR` the absolute path to your `happiness_proj` directory
-  * assigns to a variable `RAW_DIR` the path to the `raw_data` directory, using the value of the `IN_DIR` variable previously defined
+  * assigns to a variable `RAW_DIR` the path to the `raw` directory, using the value of the `IN_DIR` variable previously defined
   * assigns to a variable `YEAR` an integer between 2008 and 2021 (choose it yourself)
   * assigns to an array `CSV_FILES` (do not forget quotes `"` `"`) all the CSV files which:
     * are in the subdirectories of `${RAW_DIR}`
     * ends with the `.csv` file extension
 
     TIP: find the right “globbing” expression and do not forget parentheses to define the array
-  * Loop on each item of the resulting array `${CSV_FILES[@]}` and print:
+  * **Within a SINGLE loop**, loop on each item of the resulting array `${CSV_FILES[@]}` and print:
     * the number of time points in that file
       * use `cat`, `|` and `wc -l` within a command expansion `$()`to save the number of time points in a variable `N_TIME_POINTS`, then display the variable value
     * the name of the file (e.g. `Armenia.csv`) to save in a variable `COUNTRY_FILENAME` [TIP: use one string manipulation statement, based on the `#` symbol]
     * the name of the file parent directory (e.g. `AF`) to save in a variable `CONTINENT_CODE` [TIP: use two string manipulation statements: one based on the `%` symbol to create a temporary variable, and another one based on the `#` symbol applied to that temporary variable]
+
+    NOTE: you only need one loop to do everything, so do not create more than one loop
 
 4. Make the script executable and run it. Use `shellcheck preproc_year_v1` to check for errors
 
@@ -104,6 +106,7 @@ Preparing the use of the `get_year` command, without running it yet in the scrip
   * edit your `.bashrc` file so that to add the path to the directory containing `get_year` to your `PATH` variable
   * update your shell environment by sourcing your `.bashrc` file
   * test that `get_year` is now reachable by your shell (i.e. that it is in your `PATH` variable) by typing `which get_year`
+      * If you are working on a Mac and `which get_year` does not work even after updating your `.bash_profile`, try adding the command `source ${HOME}/.bashrc` to the `.profile` file in your home directory, save it, and then start a new terminal to test if it works. Report to Slack if you are stuck here.
 3. After reading the usage of `get_year`, test it on a test output file to check it works. Then delete the test output file.
 4. Save `preproc_year_v1` as `preproc_year_v2` and edit is so that it also:
   * assigns to a variable `OUT_DIR` the path to a directory named with the year chosen and inside a `preproc` directory itself within `happiness_proj` (e.g. `/home/ada/happiness_proj/preproc/2018` if the year is 2018) [TIP: define `OUT_DIR` using the `IN_DIR` and `YEAR` variables]
