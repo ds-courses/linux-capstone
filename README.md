@@ -61,9 +61,9 @@ Furthemore you were told to exclude datasets from countries with less than 5 tim
 ## PART 1
 -----
 Reorganizing the data and defining the script main variables.
-1. Create a directory `happiness_proj`
+1. Create a directory `happiness_proj` inside the `ada` directory
 
-2. Copy recursively the content of `/home/ada/happiness_data` to a directory `raw` inside `happiness_proj`. The results should be:
+2. Copy recursively the content of `happiness_data` to a directory `raw` inside `happiness_proj` (note: `happiness_data` is in the `ada` directory). The results should be:
 ```
 happiness_proj
     └─ raw
